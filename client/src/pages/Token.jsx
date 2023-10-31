@@ -18,6 +18,7 @@ function Token() {
     <>
       <div className="text-3xl text-center">User registered successfully</div>
       <div className="flex justify-center">
+        <h2>YO</h2>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
