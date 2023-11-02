@@ -52,6 +52,7 @@ function Post({ user }) {
     axios.get(`http://localhost:3001/posts/${id}`).then((response) => {
       setPostData(response.data);
     });
+    
   }, []);
 
   useEffect(() => {
