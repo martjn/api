@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Users } = require("../models");
+const { Posts, Likes } = require("../models");
 const bcrypt = require("bcrypt");
 const {validateToken} = require("../middlewares/AuthMiddleware")
 
@@ -50,5 +51,26 @@ router.post("/login", async (req, res) => {
 router.get("/auth", validateToken, (req, res) => {
   res.json(req.user);
 })
+
+router.get("/user/:id", async (req, res) => {
+  const id = req.params.id
+
+  const basicInfo = await Users.findByPk(id);
+  const associatedPosts = await Posts.findAll({where: {
+    username: basicInfo.username,
+  }, include: [Likes]})
+  res.json({id: basicInfo.id, username: basicInfo.username, associatedPosts: associatedPosts})
+})
+
+/*
+router.get("/", validateToken, async (req, res) => {
+  const listOfPosts = await Posts.findAll({include: [Likes]})
+
+  const likedPosts = await Likes.findAll({where: {
+    UserId: req.user.id
+  }})
+  res.json({listOfPosts: listOfPosts, likedPosts: likedPosts})
+});
+*/
 
 module.exports = router;

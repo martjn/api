@@ -5,12 +5,15 @@ import axios from "axios";
 import { Button } from "@material-tailwind/react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { AuthContext } from "../helpers/AuthContext";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useNavigate } from "react-router-dom";
 
 function Post({ user }) {
   const [postData, setPostData] = useState([]);
   const [commentData, setCommentData] = useState([]);
   let { id } = useParams();
   let { authState } = useContext(AuthContext);
+  let navigate = useNavigate();
 
   const initialValues = {
     commentText: "",
@@ -39,20 +42,23 @@ function Post({ user }) {
   };
 
   const deleteComment = (id) => {
-    axios.delete(`http://localhost:3001/comments/${id}`, {
-      headers: { accessToken: localStorage.getItem("accessToken") },
-    }).then(() => {
-      setCommentData(commentData.filter((val) => {
-        return val.id !== id;
-      }))
-    });
+    axios
+      .delete(`http://localhost:3001/comments/${id}`, {
+        headers: { accessToken: localStorage.getItem("accessToken") },
+      })
+      .then(() => {
+        setCommentData(
+          commentData.filter((val) => {
+            return val.id !== id;
+          })
+        );
+      });
   };
 
   useEffect(() => {
     axios.get(`http://localhost:3001/posts/${id}`).then((response) => {
       setPostData(response.data);
     });
-    
   }, []);
 
   useEffect(() => {
@@ -61,16 +67,77 @@ function Post({ user }) {
       console.log("Fetch comments");
     });
   }, []);
+
+  const deletePost = (id) => {
+    axios
+      .delete(`http://localhost:3001/posts/${id}`, {
+        headers: {
+          accessToken: localStorage.getItem("accessToken"),
+        },
+      })
+      .then(() => {
+        navigate("/");
+      });
+  };
+
+  const editPost = (option) => {
+    if (option === "title") {
+      let newTitle = prompt("Edit title:");
+      axios.put(
+        "http://localhost:3001/posts/title",
+        { newTitle: newTitle, id: id },
+        {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        }
+      );
+      setPostData({...postData, title: newTitle})
+    } else {
+      let newPostBody = prompt("Edit body:");
+      axios.put(
+        "http://localhost:3001/posts/postText",
+        { newText: newPostBody, id: id },
+        {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        }
+      );
+      setPostData({...postData, postText: newPostBody})
+    }
+  };
   return (
     <>
       <div className="p-4 w-4/6 shadow-lg my-5 rounded-xl">
-        <div className="my-2 p-2 font-bold bg-gray-800 text-blue-gray-200 rounded">
+        <div
+          onClick={() => {
+            if (authState.username === postData.username) {
+              editPost("title");
+            }
+          }}
+          className="my-2 p-2 font-bold bg-gray-800 text-blue-gray-200 rounded"
+        >
           {postData.title}
         </div>
-        <div className="border-2 border-violet-600 rounded p-2">
+        <div
+          onClick={() => {
+            editPost("body");
+          }}
+          className="border-2 border-violet-600 rounded p-2"
+        >
           {postData.postText}
         </div>
-        <div className="text-sm">{`@${postData.username}`}</div>
+        <div className="flex text-sm justify-between">
+          {`@${postData.username}`}
+          {authState.username === postData.username && (
+            <button
+              onClick={() => {
+                deletePost(postData.id);
+              }}
+              className="p-1 bg-red-700 rounded-lg hover:text-white transition"
+            >
+              <DeleteOutlineIcon />
+              Delete post
+            </button>
+          )}
+        </div>
       </div>
       {localStorage.getItem("accessToken") && (
         <div className="p-4 w-1/2 shadow-lg rounded-xl">

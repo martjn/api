@@ -5,12 +5,12 @@ import "../index.css";
 import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../helpers/AuthContext";
 
 function CreatePost() {
   let navigate = useNavigate();
-  let {authState} = useContext(AuthContext)
+  let { authState } = useContext(AuthContext);
 
   const initialValues = {
     title: "",
@@ -21,14 +21,23 @@ function CreatePost() {
   const validationSchema = Yup.object().shape({
     title: Yup.string().required(),
     postText: Yup.string().required(),
-    username: Yup.string().min(3).max(20).required(),
   });
 
   const onSubmit = (data) => {
-    axios.post("http://localhost:3001/posts", data).then((response) => {
-      navigate("/");
-    });
+    axios
+      .post("http://localhost:3001/posts", data, {
+        headers: { accessToken: localStorage.getItem("accessToken") },
+      })
+      .then((response) => {
+        navigate("/");
+      });
   };
+
+  useEffect(() => {
+    if (!localStorage.getItem("accessToken")) {
+      navigate("/auth");
+    }
+  }, []);
 
   return (
     <div className="flex flex-col my-11 lg:w-6/12 shrink-0 mx-10 shadow-2xl shadow-blue-gray-500 rounded-3xl p-10">

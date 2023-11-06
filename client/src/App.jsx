@@ -10,6 +10,8 @@ import { Button, Navbar } from "@material-tailwind/react";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import Token from "./pages/Token";
+import PageNotFound from "./pages/PageNotFound";
+import Profile from "./pages/Profile";
 
 import HomeIcon from "../src/Components/Icons/HomeIcon";
 import ProfileMenu from "./Components/UserProfile/ProfileMenu";
@@ -81,6 +83,8 @@ function App() {
             <Route path="/auth" element={<Login />} />
             <Route path="/register" element={<Registration />} />
             <Route path="/token" element={<Token />} />
+            <Route path="/profile/:id" element={<Profile />} />
+            <Route path="*" element={<PageNotFound/>}/>
           </Routes>
         </Router>
       </AuthContext.Provider>

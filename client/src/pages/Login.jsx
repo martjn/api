@@ -17,6 +17,7 @@ function Login() {
   let navigate = useNavigate();
   const [wrongCredentials, setWrongCredentials] = useState(false);
   const {setAuthState} = useContext(AuthContext);
+  const {authState} = useContext(AuthContext);
 
   const initialValues = {
     username: "",
@@ -34,6 +35,7 @@ function Login() {
         localStorage.setItem("accessToken", response.data.token);
         localStorage.setItem("user", response.data.username);
         setAuthState({username: response.data.username, id: response.data.id, status: true})
+        console.log(authState)
         navigate("/");
       }
       else{

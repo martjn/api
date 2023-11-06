@@ -1,17 +1,36 @@
 import React from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import HeartIcon from "../Components/Icons/HeartIcon";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import { AuthContext } from "../helpers/AuthContext";
 
 function Home() {
   const [listOfPosts, setListOfPosts] = useState([]);
+  const [likedPosts, setLikedPosts] = useState([]);
+  const { authState } = useContext(AuthContext);
   let navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:3001/posts").then((response) => {
-      setListOfPosts(response.data);
-    });
+    if (!localStorage.getItem("accessToken")) {
+      navigate("/auth");
+    } else {
+      axios
+        .get("http://localhost:3001/posts", {
+          headers: {
+            accessToken: localStorage.getItem("accessToken"),
+          },
+        })
+        .then((response) => {
+          setListOfPosts(response.data.listOfPosts);
+          setLikedPosts(
+            response.data.likedPosts.map((value) => {
+              return value.PostId;
+            })
+          );
+        });
+    }
   }, []);
 
   const onLike = (postId) => {
@@ -30,18 +49,29 @@ function Home() {
           listOfPosts.map((post) => {
             if (post.id === postId) {
               if (response.data.liked) {
+                // we only care about the length of the array here
                 return { ...post, Likes: [...post.Likes, 0] };
-              }
-              else{
-                const likesArray = post.Likes
-                likesArray.pop()
-                return { ...post, Likes:  likesArray};
+              } else {
+                const likesArray = post.Likes;
+                likesArray.pop();
+                return { ...post, Likes: likesArray };
               }
             } else {
               return post;
             }
           })
         );
+        if (likedPosts.includes(postId)) {
+          //remove
+          setLikedPosts(
+            likedPosts.filter((id) => {
+              return id !== postId;
+            })
+          );
+        } else {
+          //add to liked posts array
+          setLikedPosts([...likedPosts, postId]);
+        }
       });
   };
 
@@ -71,15 +101,25 @@ function Home() {
             </div>
             <div className="text-sm">{`@${value.username}`}</div>
             <div>
-              <button
-                onClick={() => {
-                  onLike(value.id);
-                }}
-                className="p-2 bg-blue-gray-500 rounded-lg"
-              >
-                <HeartIcon/>
-              </button>
-              <label className="ml-2 p-2 text-md font-bold bg-blue-gray-100 rounded-lg">{value.Likes.length}</label>
+              {likedPosts.includes(value.id) ? (
+                <ThumbUpIcon
+                  className="cursor-pointer"
+                  onClick={() => {
+                    onLike(value.id);
+                  }}
+                />
+              ) : (
+                <ThumbUpOutlinedIcon
+                  className="cursor-pointer"
+                  onClick={() => {
+                    onLike(value.id);
+                  }}
+                />
+              )}
+
+              <label className="ml-2 p-2 text-md font-bold bg-blue-gray-100 rounded-lg">
+                {value.Likes.length}
+              </label>
             </div>
           </div>
         );
