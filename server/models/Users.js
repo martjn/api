@@ -8,11 +8,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-  })
+  });
+
   Users.associate = (models) => {
     Users.hasMany(models.Likes, {
       onDelete: "cascade",
-    })
-  }
-  return Users
-}
+    });
+  };
+
+  return Users;
+};
