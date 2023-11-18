@@ -2,13 +2,15 @@ import React from "react";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { AuthContext } from "../helpers/AuthContext";
+import CommentIcon from "@mui/icons-material/Comment";
 
 function Home() {
   const [listOfPosts, setListOfPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
+  const [commentData, setCommentData] = useState([]);
   const { authState } = useContext(AuthContext);
   let navigate = useNavigate();
 
@@ -29,6 +31,24 @@ function Home() {
               return value.PostId;
             })
           );
+          // Fetch comments only if listOfPosts is available
+          if (response.data.listOfPosts.length !== 0) {
+            const promises = response.data.listOfPosts.map((post) => {
+              return axios
+                .get(
+                  `https://full-stack-api-pmvb.onrender.com/comments/${post.id}`
+                )
+                .then((response) => {
+                  setCommentData((prevCommentData) => [
+                    ...prevCommentData,
+                    {
+                      postId: post.id,
+                      commentAmount: response.data.length,
+                    },
+                  ]);
+                });
+            });
+          }
         });
     }
   }, []);
@@ -81,45 +101,52 @@ function Home() {
         return (
           <div
             key={key}
-            className="p-4 w-1/2 shadow-lg my-5 hover:shadow-2xl hover:border-opacity-100 hover:border-2 rounded-lg"
+            className="p-4 w-1/2 border-b border-gray-300 rounded-lg bg-gray-900"
           >
-            <div
-              className="my-2 p-2 font-bold bg-gray-800 text-blue-gray-200 rounded cursor-pointer"
-              onClick={() => {
-                navigate(`/post/${value.id}`);
-              }}
-            >
+            <div className="text-sm text-gray-400">{`@${value.username} · ${value.createdAt}`}</div>
+            <div className="text-lg my-2 font-bold text-white rounded">
               {value.title}
             </div>
-            <div
-              className="border-2 border-violet-600 rounded p-2"
-              onClick={() => {
-                navigate(`/post/${value.id}`);
-              }}
-            >
+            <div className="text-gray-400 mb-2 text-sm whitespace-pre-line">
               {value.postText}
             </div>
-            <div className="text-sm">{`@${value.username}`}</div>
-            <div>
-              {likedPosts.includes(value.id) ? (
-                <ThumbUpIcon
-                  className="cursor-pointer"
-                  onClick={() => {
-                    onLike(value.id);
-                  }}
-                />
-              ) : (
-                <ThumbUpOutlinedIcon
-                  className="cursor-pointer"
-                  onClick={() => {
-                    onLike(value.id);
-                  }}
-                />
-              )}
+            <div class="flex flex-row">
+              <div class="flex flex-row text-white hover:text-orange-900 transition-all mr-3 bg-blue-gray-900 rounded-lg p-1">
+                {likedPosts.includes(value.id) ? (
+                  <FavoriteIcon
+                    className="cursor-pointer"
+                    onClick={() => {
+                      onLike(value.id);
+                    }}
+                  />
+                ) : (
+                  <FavoriteBorderIcon
+                    className="cursor-pointer"
+                    onClick={() => {
+                      onLike(value.id);
+                    }}
+                  />
+                )}
 
-              <label className="ml-2 p-2 text-md font-bold bg-blue-gray-100 rounded-lg">
-                {value.Likes.length}
-              </label>
+                <label className="ml-1 text-md font-bold rounded-lg">
+                  {value.Likes.length}
+                </label>
+              </div>
+
+              <div class="flex flex-row text-white hover:text-orange-900 transition-all bg-blue-gray-900 rounded-lg p-1">
+                <CommentIcon
+                  className="cursor-pointer"
+                  onClick={() => {
+                    navigate(`/post/${value.id}`);
+                  }}
+                />
+                <label className="ml-1 text-md font-bold rounded-lg">
+                  {
+                    commentData.find((comment) => comment.postId === value.id)
+                      ?.commentAmount
+                  }
+                </label>
+              </div>
             </div>
           </div>
         );
