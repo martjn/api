@@ -7,7 +7,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { AuthContext } from "../helpers/AuthContext";
 import CommentIcon from "@mui/icons-material/Comment";
 import TimeAgo from "../Components/TimeAgo/TimeAgo";
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { HeartIcon } from "@heroicons/react/24/solid";
 
 function Home() {
@@ -34,7 +34,7 @@ function Home() {
         })
         .then((response) => {
           setListOfPosts(response.data.listOfPosts);
-          console.log("set listofposts")
+          console.log("response => ", response);
           setLikedPosts(
             response.data.likedPosts.map((value) => {
               return value.PostId;
@@ -118,34 +118,40 @@ function Home() {
 
   const handleSort = (value) => {
     setSortBy(value);
-    console.log("sort by", value)
-  }
+    console.log("sort by", value);
+  };
 
   return (
     <div class="flex flex-col">
       <div class="flex flex-col items-center my-4">
-        <span class="text-white font-bold text-2xl">
+        <span class="text-white font-bold text-2xl cursor-default">
           Welcome to PostIt, {authState.username}
         </span>
       </div>
-      <div className="flex my-2 items-center justify-end max-w-screen-2xl">
-        <span className="text-white">Sort by</span>
-        <button
-          onClick={() => handleSort("date")}
-          className={`${
-            sortBy === "date" ? "bg-blue-gray-500 text-white" : "bg-gray-500"
-          } mx-2 rounded-md`}
-        >
-          <AccessTimeIcon/>
-        </button>
-        <button
-          onClick={() => handleSort("popularity")}
-          className={`${
-            sortBy === "popularity" ? "bg-blue-gray-500 text-white" : "bg-gray-500"
-          } mx-2 rounded-md`}
-        >
-          <FavoriteIcon/>
-        </button>
+      <div className="flex flex-col my-2 items-center justify-center">
+        <span className="text-white font-bold cursor-default">Sort by</span>
+        <div className="flex">
+          <button
+            onClick={() => handleSort("date")}
+            className={`${
+              sortBy === "date" ? "bg-white text-black" : "bg-black text-white"
+            } mx-2 rounded-md border tranisiton transition-all`}
+          >
+            <AccessTimeIcon />
+          </button>
+          <button
+            onClick={() => handleSort("popularity")}
+            className={`${
+              sortBy === "popularity"
+                ? "bg-white text-black"
+                : "bg-black text-white"
+            } mx-2 rounded-md tranisiton transition-all`}
+          >
+            <FavoriteIcon />
+          </button>
+          
+        </div>
+        <span className="text-white cursor-default">{sortBy}</span>
       </div>
       <div className="flex flex-col items-center w-fit border-x border-t rounded-sm border-blue-gray-100 border-opacity-50 md:w-3/4 lg:w-1/2 xl:w-1/3 mx-auto">
         {listOfPosts.map((value, key) => {
