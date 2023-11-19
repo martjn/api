@@ -23,7 +23,7 @@ export function ProfileMenu() {
   };
 
   const onClickProfile = (userId) => {
-    navigate(`/profile/${userId}`)
+    navigate(`/profile/${userId}`);
   };
   return (
     <Menu>
@@ -33,7 +33,6 @@ export function ProfileMenu() {
           alt="tania andrew"
           className="cursor-pointer"
           src="user.png"
-          
           style={{
             backgroundColor: "white",
             filter: "invert(1)",
@@ -43,7 +42,18 @@ export function ProfileMenu() {
         />
       </MenuHandler>
       <MenuList className="bg-black text-white border-blue-gray-100 border-opacity-50">
-        <MenuItem className="flex items-center gap-2 ">
+        <div className="flex justify-center items-center flex-col cursor-default gap-1">
+          <span className="font-bold">Logged in as</span>
+          <span className="font-bold bg-blue-gray-900 py-1 px-5 rounded-full">
+            {authState.username}
+          </span>
+        </div>
+        <MenuItem
+          className="flex items-center gap-2 "
+          onClick={() => {
+            onClickProfile(authState.id);
+          }}
+        >
           <svg
             width="16"
             height="16"
@@ -59,13 +69,13 @@ export function ProfileMenu() {
             />
           </svg>
 
-          <Typography variant="small" className="font-medium" onClick={() => {onClickProfile(authState.id)}}>
+          <Typography variant="small" className="font-medium">
             My Profile
           </Typography>
-
         </MenuItem>
+
         <hr className="my-2 border-blue-gray-100 border-opacity-50" />
-        <MenuItem className="flex items-center gap-2 ">
+        <MenuItem className="flex items-center gap-2 " onClick={onSignOut}>
           <svg
             width="16"
             height="14"
@@ -80,7 +90,7 @@ export function ProfileMenu() {
               fill="#90A4AE"
             />
           </svg>
-          <Typography variant="small" className="font-medium" onClick={onSignOut}>
+          <Typography variant="small" className="font-medium">
             Sign Out
           </Typography>
         </MenuItem>

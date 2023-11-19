@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   ListItemPrefix,
+  ListItemSuffix
 } from "@material-tailwind/react";
 import {
   UserCircleIcon,
@@ -21,6 +22,10 @@ export function Sidebar({isOpen, onClose}) {
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
+
+  const handleNavigate = (route) => {
+    navigate(route);
+  }
 
   const sidebarStyles = isOpen ? "translate-x-0" : "-translate-x-full"; // Toggle the sidebar
 
@@ -40,11 +45,13 @@ export function Sidebar({isOpen, onClose}) {
       </div>
       <hr className="my-2 border-blue-gray-100 border-opacity-50" />
       <List>
-        <ListItem className="text-white">
+        <ListItem className="text-white" onClick={() => {handleNavigate("/createpost")}}>
           <ListItemPrefix>
             <AddBoxIcon />
           </ListItemPrefix>
-          <Link to="/createpost">New Post</Link>
+          <ListItemSuffix className="font-bold">
+            New Post
+          </ListItemSuffix>
         </ListItem>
       </List>
     </Card>

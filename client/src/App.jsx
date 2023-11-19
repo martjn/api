@@ -86,7 +86,6 @@ function App() {
                     >
                       PostIt
                     </span>
-
                   </Link>
                 )}
                 <div
