@@ -80,7 +80,7 @@ function App() {
                     className="mb-2 flex items-center gap-4 cursor-pointer"
                   >
                     
-                    <img src="favicon.ico" alt="brand" className="h-8 w-8" />
+                    <img src="favicon.ico" alt="brand" className="h-8 w-8" loading="lazy"/>
                     <span
                       className="font-black text-md text-white"
                     >

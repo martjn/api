@@ -21,7 +21,7 @@ function CreatePost() {
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required(),
-    postText: Yup.string().required(),
+    postText: Yup.string().max(4000).required(),
   });
 
   const onSubmit = (data) => {
@@ -60,7 +60,11 @@ function CreatePost() {
           </div>
           <div className="text-gray-400 mb-2 text-sm whitespace-pre-line">
             <div className="p-2">
-              <Formik initialValues={initialValues} onSubmit={onSubmit}>
+              <Formik
+                validationSchema={validationSchema}
+                initialValues={initialValues}
+                onSubmit={onSubmit}
+              >
                 <Form className="flex flex-col gap-6 mt-2">
                   <Field
                     type="text" // Change the type to text
@@ -68,6 +72,11 @@ function CreatePost() {
                     name="title" // Use a different name for the title field
                     placeholder="Title..."
                     autoComplete="off"
+                  />
+                  <ErrorMessage
+                    className="text-red-400 font-bold"
+                    name="postText"
+                    component="span"
                   />
                   <Field
                     component="textarea"

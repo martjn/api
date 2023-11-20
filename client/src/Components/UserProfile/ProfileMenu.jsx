@@ -36,6 +36,7 @@ export function ProfileMenu() {
           alt="tania andrew"
           className="cursor-pointer"
           src="user.png"
+          loading="lazy"
           style={{
             backgroundColor: "white",
             filter: "invert(1)",

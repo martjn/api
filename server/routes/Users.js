@@ -151,6 +151,7 @@ router.get("/auth", validateToken, (req, res) => {
  */
 
 router.get("/user/:id", async (req, res) => {
+  let order = [["createdAt", "DESC"]];
   const id = req.params.id;
 
   const basicInfo = await Users.findByPk(id);
@@ -159,11 +160,19 @@ router.get("/user/:id", async (req, res) => {
       username: basicInfo.username,
     },
     include: [Likes],
+    order
+  });
+  const likedPosts = await Likes.findAll({
+    where: {
+      UserId: id
+    },
   });
   res.json({
     id: basicInfo.id,
     username: basicInfo.username,
+    createdAt: basicInfo.createdAt,
     associatedPosts: associatedPosts,
+    likedPosts: likedPosts,
   });
 });
 
