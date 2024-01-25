@@ -47,12 +47,8 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -64,7 +60,12 @@
 
 ### Built With
 
+- [![JavaScript][JavaScript]][JavaScript-url]
+- [![NodeJS][NodeJS]][NodeJS-url]
 - [![React][React.js]][React-url]
+- [![Sequelize][Sequelize]][Sequelize-url]
+- [![TailwindCSS][TailwindCSS]][TailwindCSS-url]
+- [![MySQL][MySQL]][MySQL-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -95,7 +96,7 @@ This is an example of how to list things you need to use the software and how to
    npm install
    ```
 3. Create a local instance of your database
-4. Create .env file with following
+4. Create .env file inside the server directory with the following
    ```js
    DB_USERNAME=your_database_username
    DB_PASSWORD=your_database_password
@@ -104,6 +105,30 @@ This is an example of how to list things you need to use the software and how to
    DB_DIALECT=your_database_dialect // ex. mysql  whichever SQL language you use.
    DB_PORT=your_port // custom port that differs from your client/frontend port
    ```
+5. Inside your server directory, start the server
+  ```sh
+  npm start
+  ```
+
+Try blasting the server with information using postman for example
+
+Api docs available at: https://full-stack-api-pmvb.onrender.com/api-docs/
+
+For ex. To get all posts, use ``http://localhost:your_port/posts`` endpoint
+
+!important: if you want to use endpoints that CRUD your data in any way (without a client), you need a valid generated webtoken. Create one by registering user via ``auth/auth`` endpoint, and then logging in using ``auth/login`` endpoint
+
+
+(Optional)
+
+If you wish to also use the postit client, do the following:
+
+1. Move to your client directory via console
+2. Start the client
+  ```sh
+  npm start
+  ```
+  It should take a few minutes to compile. And that's it.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -131,10 +156,6 @@ Don't forget to give the project a star! Thanks again!
 Martin Toming - [@marttintom](https://twitter.com/marttintom) - mingdev77@gmail.com
 
 Project Link: [https://github.com/martjn/postit](https://github.com/martjn/postit)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ACKNOWLEDGMENTS -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -171,3 +192,18 @@ Project Link: [https://github.com/martjn/postit](https://github.com/martjn/posti
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com
+
+[TailwindCSS]: https://img.shields.io/badge/tailwindcss-0F172A?style=for-the-badge&logo=tailwindcss
+[TailwindCSS-url]: https://tailwindcss.com/
+
+[NodeJS]: https://img.shields.io/badge/node.js-002200?style=for-the-badge&logo=node.js
+[NodeJS-url]: https://nodejs.org/en
+
+[MySQL]: https://shields.io/badge/MySQL-lightgrey?logo=mysql&style=for-the-badge&logoColor=white&labelColor=blue
+[MySQL-url]: https://www.mysql.com/
+
+[Sequelize]: https://img.shields.io/badge/-Sequelize-52B0E7?style=for-the-badge&logo=sequelize&labelColor=52B0E7&logoColor=FFF
+[Sequelize-url]: https://sequelize.org/
+
+[JavaScript]: https://shields.io/badge/JavaScript-F7DF1E?logo=JavaScript&logoColor=000&style=for-the-badge
+[Javascript-url]: https://developer.mozilla.org/en-US/docs/Web/JavaScript
