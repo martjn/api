@@ -62,10 +62,10 @@
 
 - [![JavaScript][JavaScript]][JavaScript-url]
 - [![NodeJS][NodeJS]][NodeJS-url]
-- [![React][React.js]][React-url]
 - [![Sequelize][Sequelize]][Sequelize-url]
-- [![TailwindCSS][TailwindCSS]][TailwindCSS-url]
 - [![MySQL][MySQL]][MySQL-url]
+- [![React][React.js]][React-url]
+- [![TailwindCSS][TailwindCSS]][TailwindCSS-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
